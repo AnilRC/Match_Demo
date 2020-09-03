@@ -14,8 +14,12 @@ namespace Match_Demo.Models
     
     public partial class Match
     {
+        public Match()
+        {
+            this.MatchDetails = new HashSet<MatchDetail>();
+        }
+    
         public int Id { get; set; }
-        public Nullable<int> PlayerId { get; set; }
         public Nullable<int> TeamOneId { get; set; }
         public Nullable<int> TeamTwoId { get; set; }
         public string MatchName { get; set; }
@@ -23,8 +27,6 @@ namespace Match_Demo.Models
         public Nullable<System.DateTime> MatchDate { get; set; }
         public string Address { get; set; }
     
-        public virtual Player Player { get; set; }
-        public virtual Team Team { get; set; }
-        public virtual Team Team1 { get; set; }
+        public virtual ICollection<MatchDetail> MatchDetails { get; set; }
     }
 }

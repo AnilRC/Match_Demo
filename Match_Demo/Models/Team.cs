@@ -14,16 +14,7 @@ namespace Match_Demo.Models
     
     public partial class Team
     {
-        public Team()
-        {
-            this.Matches = new HashSet<Match>();
-            this.Matches1 = new HashSet<Match>();
-        }
-    
         public int Id { get; set; }
         public string TeamName { get; set; }
-    
-        public virtual ICollection<Match> Matches { get; set; }
-        public virtual ICollection<Match> Matches1 { get; set; }
     }
 }

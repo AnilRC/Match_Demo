@@ -26,6 +26,7 @@ namespace Match_Demo.Models
         }
     
         public DbSet<Match> Matches { get; set; }
+        public DbSet<MatchDetail> MatchDetails { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
     }

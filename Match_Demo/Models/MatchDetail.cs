@@ -12,10 +12,15 @@ namespace Match_Demo.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Player
+    public partial class MatchDetail
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Type { get; set; }
+        public int MatchDetailId { get; set; }
+        public Nullable<int> MatchId { get; set; }
+        public Nullable<int> PlayerId { get; set; }
+        public string PlayerType { get; set; }
+        public string Position { get; set; }
+        public string TeamId { get; set; }
+    
+        public virtual Match Match { get; set; }
     }
 }

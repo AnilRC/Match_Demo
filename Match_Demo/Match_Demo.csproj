@@ -103,8 +103,8 @@
     <Content Include="Global.asax" />
     <Content Include="Models\MatchDBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MatchDBModel.Context.cs</LastGenOutput>
       <DependentUpon>MatchDBModel.edmx</DependentUpon>
+      <LastGenOutput>MatchDBModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\MatchDBModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -113,6 +113,13 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="Models\MatchDBModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MatchDBModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\MatchDBModel.edmx.diagram">
+      <DependentUpon>MatchDBModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -143,6 +150,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MatchDBModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MatchDetail.cs">
+      <DependentUpon>MatchDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Player.cs">
       <DependentUpon>MatchDBModel.tt</DependentUpon>
     </Compile>
@@ -150,21 +160,16 @@
       <DependentUpon>MatchDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\MatchRepo.cs" />
     <Compile Include="Repositories\PlayersRepo.cs" />
     <Compile Include="Repositories\TeamsRepo.cs" />
+    <Compile Include="ViewModels\MatchDetailModel.cs" />
     <Compile Include="ViewModels\MatchModel.cs" />
     <Compile Include="ViewModels\PlayersModel.cs" />
     <Compile Include="ViewModels\TeamsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <EntityDeploy Include="Models\MatchDBModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MatchDBModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\MatchDBModel.edmx.diagram">
-      <DependentUpon>MatchDBModel.edmx</DependentUpon>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />

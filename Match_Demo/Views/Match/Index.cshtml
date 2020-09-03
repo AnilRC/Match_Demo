@@ -19,7 +19,7 @@
         <div class="form-group ">
             <div class="col-md-6">
                 Match Date:
-                <input type="text" id="txtMatchdate" class="form-control" name="MatchDate" placeholder="dd/mm/yyy" />
+                <input type="text" id="txtMatchDate" class="form-control" name="MatchDate" placeholder="dd/mm/yyy" />
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
         <div class="form-group ">
             <div class="col-md-6">
                 Start Time :
-                <input type="text" id="txtstartTime" class="form-control" name="StartTime" placeholder="Enter Match Name" />
+                <input type="text" id="txtStartTime" class="form-control" name="StartTime" placeholder="Enter Match Name" />
             </div>
         </div>
         <div class="form-group">
@@ -90,13 +90,16 @@
                 </th>
             </tr>
         </thead>
+        <tbody>
+
+        </tbody>
     </table>
 </fieldset>
 
 <br />
 <div class="row">
     <div class="form-group pull-right">
-        <input type="button" id="btnSubmit" value="Submit" data-toggle="modal" data-target="#divAddPlayer" class="btn btn-primary" data-backdrop="static" data-keydrop="false" />&nbsp;&nbsp;
+        <input type="button" id="btnSubmit" value="Submit"  class="btn btn-primary" data-backdrop="static" data-keydrop="false" />&nbsp;&nbsp;
         <input type="button" id="btnCancel" value="Cancel" class="btn btn-danger" />
     </div>
 
@@ -159,50 +162,220 @@
         </div>
     </div>
 
+<div id="divEditPlayer" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Player</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="form-group">
+                        <label for="NameEdit" class="col-form-label">Name :</label>
+                        @Html.DropDownList("NameEdit", new SelectList(Model.Item1, "Value", "Text"), new { @class = "form-control" })
+
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="txtTypeEdit" class="col-form-label">Type :</label>
+                        <input type="text" id="txtTypeEdit" class="form-control" disabled />
+
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="txtPositionEdit" class="col-form-label">Position :</label>
+
+                        <input type="text" id="txtPositionEdit" class="form-control" />
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="Team" class="col-form-label">Team :</label>
+                        @Html.DropDownList("TeamEdit", new SelectList(Model.Item3, "Value", "Text"), new { @class = "form-control" })
+
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnSave" value="Add">Save</button>
+                <button type="button" class="btn btn-danger" value="Close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        
+
+<script type="text/javascript">
+
+    
+
+    $(document).ready(function () {
+       
+        $("#PlayerName").val(0);
+        $("#Team").val(0);
         $("#PlayerName").change(function () {
             var Id = $("#PlayerName").val();
             getPlayerType(Id);
 
         });
-        $("#btnAdd").click(function () {
+        $("#btnAdd").click(function (e) {
             //$("#divAddPlayer").closeModal();  
+            e.preventDefault();
             AddPlayersToList();
+            $("#divAddPlayer").modal('hide');
+            clear();
+            return false;
         });
-        
-    });
 
+      
+        $(function () {
+            $("#tbllist").on('click', '#btnEdit', function (be) {
+
+                event.preventDefault();
+                var tr = be.target.parentNode.parentNode;
+
+                var id = tr.cells[0].textContent;
+                var playerName = tr.cells[1].textContent;
+                var playerType = tr.cells[2].textContent;
+                var playerPosition = tr.cells[3].textContent;
+                var playerTeam = tr.cells[4].textContent;
+                //var level = tr.cells[5].textContent;
+
+                //var playerName = tr.find('td:eq(1)');
+                //var playerType = tr.find('td:eq(2)');
+                //var playerPosition = tr.find('td:eq(3)');
+                //var playerTeam = tr.find('td:eq(4)');
+
+                //$("#NameEdit").text(playerName.text());
+                $("#NameEdit").val(playerName).attr('selected', 'selected');
+                $("#txtTypeEdit").val(playerType);
+                $("#txtPositionEdit").val(playerPosition);
+                $("#TeamEdit").val(playerTeam).attr('selected', 'selected');
+                $("#divEditPlayer").modal('show');
+            });
+
+            $("#btnSave").click(function (e) {
+                $(playerName).text($("#NameEdit option:selected").val());
+                $(playerType).text($("#txtTypeEdit").val());
+                $(playerPosition).text($("#txtPositionEdit").val());
+                $(playerTeam).text($("#TeamEdit option:selected").val());
+                $("#divEditPlayer").modal("hide");
+            });
+        });
+
+        $("#btnSubmit").click(function () {
+            Save();
+            clearAll();
+            clear();
+        });
+       
+    });
     
+    function Save() {
+        var matchModel = {};
+        var MatchDetails = new Array();
+        matchModel.MatchName = $("#txtMatchName").val();
+        matchModel.StartTime = $("#txtStartTime").val();
+        matchModel.TeamOneId = $("#TeamOne").val();
+        matchModel.TeamTwoId = $("#TeamOne").val();
+        matchModel.Address = $("#txtAddress").val();
+        matchModel.MatchDate = $("#txtMatchDate").val();
+
+
+       
+
+
+        $("#tbllist").find("tr:gt(0)").each(function () {
+            var MatchDetailModel = {};
+           
+            MatchDetailModel.PlayerId = $(this).find("td:eq(0)").text();
+            MatchDetailModel.PlayerType = $(this).find("td:eq(2)").text();
+            MatchDetailModel.Position = $(this).find("td:eq(3)").text();
+            MatchDetailModel.TeamId = $(this).find("td:eq(4)").text();
+            MatchDetails.push(MatchDetailModel);
+        });
+        matchModel.MatchDetails = MatchDetails;
+
+
+        $.ajax({
+            async: true,
+            type: 'Post',
+            dataType: 'JSON',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify(matchModel),
+            url: '/Match/Index',
+            success: function (data) {
+                alert(data);
+            },
+            error: function () {
+                alert('Problem adding the data');
+            }
+        });
+     
+    }
     
+    function clearAll() {
+
+        $("#tbllist tbody").empty();
+        $("#tblItemList").hide();
+        $("#txtStartTime").val('');
+        $("#txtMatchName").val('');
+        $("#TeamOne").val(0);
+        $("#Teamtwo").val(0);
+        $("#txtAddress").val('');
+        $("#txtMatchDate").val('');
+    }
     function AddPlayersToList() {
         var Id = $("#PlayerName").val();
+        
         var PlayerName = $("#PlayerName option:selected").text();
         var PlayerType = $("#txtPlayerType").val();
         var Position = $("#txtPosition").val();
-        var Team = $("#Team").val();
+        var Team = $("#Team option:selected").text();
         
-        var tableList = $("#tblList");
+        var tableList = $("#tbllist tbody");
         var List = "<tr><td hidden>" + Id
             + "</td><td>" + PlayerName +
             "</td><td>" + PlayerType +
             "</td><td>" + Position +
             "</td><td>" + Team +
-           
-            "</td><td><input type='button' id='btnRemove' class='btn btn-danger' value=' Remove' onclick='RemoveItem(this)' name='remove'/></td></tr>";
+            "</td><td><button id='btnEdit' value='edit'>Edit</button><span class='btn glyphicon glyphicon-edit text-primary' id='btnEdit1' onclick='showModal()'></span> <span class='btn glyphicon glyphicon-remove text-danger' onclick='RemovePlayer(this)' ></span> </td></tr>";
         tableList.append(List);
+       
         
-        //resetItem();
+        
+      
     }
-  
-    
+
+    function clear() {
+        $("#PlayerName").val(0);
+        $("#Team").val(0);
+        $("#txtPosition").val('');
+        $("#txtPlayerType").val('');
+    }
+    function RemovePlayer(Id) {
+        $(Id).closest('tr').remove();
+        
+    }
     function getPlayerType(Id) {
-        //alert(itemId);
+    
         $.ajax({
             async: true,
             type: 'Get',
